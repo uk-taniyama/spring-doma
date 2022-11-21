@@ -55,6 +55,7 @@ dependencies {
   annotationProcessor 'org.seasar.doma:doma-processor:2.53.1'
   testImplementation 'junit:junit:4.13.2'
   testImplementation 'org.springframework.security:spring-security-test'
+  testImplementation 'com.btmatthews.junit:junit-rules:1.0.1'
 }
 
 tasks.named('test') {

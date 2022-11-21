@@ -2,13 +2,13 @@ package com.example.service;
 
 import static org.junit.Assert.*;
 
+import com.btmatthews.junit.rules.LoggingRule;
 import com.example.dao.MstNewsDao;
 import com.example.dto.NewsDto;
 import com.example.entity.MstNews;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,13 +20,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "../../../schema-dev.sql")
-@Sql(scripts = "../dao/data_news.sql")
 public class NewsServiceImplTest {
 
   @Autowired private NewsService service;
   @Autowired private MstNewsDao dao;
 
-  @Rule public ExpectedException expectedException = ExpectedException.none();
+  @Rule public LoggingRule loggingRule = new LoggingRule();
 
   @Test
   public void addNews() throws Exception {
@@ -38,12 +37,12 @@ public class NewsServiceImplTest {
     service.addNews(dto);
 
     List<MstNews> mstNewses = dao.selectAll();
-    assertEquals(12, mstNewses.size());
+    assertEquals(1, mstNewses.size());
   }
 
   @Test
+  @Sql(scripts = "../dao/data_news.sql")
   public void findNewsPage() {
-
     // 条件なし 1ページ
     Page<NewsDto> newsList = service.findNewsPage("", "", "", 0);
     System.out.println(newsList.getContent().size());
@@ -113,10 +112,14 @@ public class NewsServiceImplTest {
     assertEquals(1, news.getVersion());
 
     // 楽観排他
-    expectedException.expect(OptimisticLockingFailureException.class);
     news.setSubject("更新後2");
     service.modifyNews(news);
-    news.setSubject("更新後3");
-    service.modifyNews(news);
+    final NewsDto news_ = news;
+    assertThrows(
+        OptimisticLockingFailureException.class,
+        () -> {
+          news_.setSubject("更新後3");
+          service.modifyNews(news_);
+        });
   }
 }

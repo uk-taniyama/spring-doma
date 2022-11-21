@@ -1,11 +1,9 @@
 package com.example.service;
 
 import com.example.dto.NewsDto;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Map;
+import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 /** お知らせ情報を操作するサービスインターフェース. */
 public interface NewsService {

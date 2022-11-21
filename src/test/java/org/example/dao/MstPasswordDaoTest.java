@@ -1,4 +1,4 @@
-package com.example.dao;
+package org.example.dao;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -13,7 +13,7 @@ import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.dialect.Dialect;
 
 /** */
-public class MstRoleDaoTest {
+public class MstPasswordDaoTest {
 
   /** */
   protected SqlFileRepository repository;
@@ -77,11 +77,11 @@ public class MstRoleDaoTest {
    * @throws Exception
    */
   @Test
-  public void testSelectByRoleName(TestInfo testInfo) throws Exception {
+  public void testSelectById(TestInfo testInfo) throws Exception {
     SqlFile sqlFile =
         repository.getSqlFile(
             testInfo.getTestMethod().get(),
-            "META-INF/com/example/dao/MstRoleDao/selectByRoleName.sql",
+            "META-INF/org/example/dao/MstPasswordDao/selectById.sql",
             dialect);
     execute(sqlFile);
   }
@@ -90,11 +90,11 @@ public class MstRoleDaoTest {
    * @throws Exception
    */
   @Test
-  public void testSelectAll(TestInfo testInfo) throws Exception {
+  public void testSelectByIdAndVersion(TestInfo testInfo) throws Exception {
     SqlFile sqlFile =
         repository.getSqlFile(
             testInfo.getTestMethod().get(),
-            "META-INF/com/example/dao/MstRoleDao/selectAll.sql",
+            "META-INF/org/example/dao/MstPasswordDao/selectByIdAndVersion.sql",
             dialect);
     execute(sqlFile);
   }

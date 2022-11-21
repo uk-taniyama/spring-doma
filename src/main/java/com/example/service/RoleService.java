@@ -1,12 +1,7 @@
 package com.example.service;
 
-import com.example.dto.NewsDto;
 import com.example.dto.RoleDto;
-import org.springframework.data.domain.Page;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Map;
 
 /** 権限機能を操作するサービスインターフェース. */
 public interface RoleService {

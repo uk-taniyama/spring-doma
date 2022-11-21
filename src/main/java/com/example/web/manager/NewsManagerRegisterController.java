@@ -3,6 +3,7 @@ package com.example.web.manager;
 import com.example.dto.NewsDto;
 import com.example.exception.BusinessException;
 import com.example.service.NewsService;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -13,8 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Map;
 
 /** お知らせ登録画面のコントローラクラス. */
 @Controller

@@ -1,9 +1,9 @@
 package com.example.listener;
 
+import java.time.LocalDateTime;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import java.time.LocalDateTime;
 
 /** Created by ko-aoki on 2017/02/14. */
 @WebListener

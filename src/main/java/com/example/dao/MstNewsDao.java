@@ -2,12 +2,11 @@ package com.example.dao;
 
 import com.example.dto.NewsDto;
 import com.example.entity.MstNews;
+import java.util.List;
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /** お知らせマスタのDaoインターフェース. */
 @ConfigAutowireable

@@ -3,11 +3,10 @@ package com.example.service;
 import com.example.dao.MstRoleDao;
 import com.example.dto.RoleDto;
 import com.example.entity.MstRole;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /** 権限機能を操作するサービスクラス. */
 @Service

@@ -1,13 +1,12 @@
 package com.example.security;
 
 import com.example.dao.MstEmployeeDao;
-import org.springframework.stereotype.Service;
-
 import com.example.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 /** Spring Securityで使用するログイン時に取得するユーザ情報サービスクラス. */
 @Service

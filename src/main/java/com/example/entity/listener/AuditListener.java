@@ -3,13 +3,12 @@ package com.example.entity.listener;
 import com.example.entity.AuditEntity;
 import com.example.security.LoginUserDetails;
 import com.example.security.UserInfo;
+import java.time.LocalDateTime;
 import org.seasar.doma.jdbc.entity.EntityListener;
 import org.seasar.doma.jdbc.entity.PreInsertContext;
 import org.seasar.doma.jdbc.entity.PreUpdateContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.time.LocalDateTime;
 
 /** Created by ko-aoki on 2016/11/06. */
 public class AuditListener<T extends AuditEntity> implements EntityListener<T> {

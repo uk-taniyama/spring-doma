@@ -15,7 +15,9 @@ public class NewsController {
   /** ロガー */
   private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
 
-  /** @return */
+  /**
+   * @return
+   */
   @RequestMapping(method = RequestMethod.GET)
   public String init(Model model) {
 

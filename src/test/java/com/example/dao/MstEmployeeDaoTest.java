@@ -1,64 +1,114 @@
 package com.example.dao;
 
-import com.example.entity.MstEmployee;
-import com.example.entity.UserEntity;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.seasar.doma.boot.autoconfigure.DomaAutoConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
+import org.seasar.doma.jdbc.SqlFile;
+import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.dialect.Dialect;
 
-import java.util.List;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-
-/** Created by ko-aoki on 2017/03/10. */
-@RunWith(SpringRunner.class)
-@JdbcTest
-@Import(DomaAutoConfiguration.class)
-@ComponentScan
-@Sql(scripts = "../../../schema-dev.sql")
-@Sql(scripts = "data_employee.sql")
+/** */
 public class MstEmployeeDaoTest {
 
-  @Autowired MstEmployeeDao dao;
+  /** */
+  protected SqlFileRepository repository;
 
-  @Test
-  public void selectAll() {
+  /** */
+  protected Dialect dialect;
 
-    List<MstEmployee> mstEmployees = dao.selectAll();
-    assertThat(mstEmployees.size(), is(3));
+  /** */
+  protected Driver driver;
+
+  /** */
+  protected String url;
+
+  /** */
+  protected String user;
+
+  /** */
+  protected String password;
+
+  @BeforeEach
+  protected void setUp() throws Exception {
+    repository = new NoCacheSqlFileRepository();
+    dialect = new org.seasar.doma.jdbc.dialect.H2Dialect();
+    url = "jdbc:h2:file:/home/taniyama/work/spring-demo/work/db/db;MODE=MySQL";
+    user = "";
+    password = "";
   }
 
-  @Test
-  public void selectOne() {
-
-    MstEmployee actual = dao.selectOne("01");
-    assertThat(actual.getEmployeeLastName(), is("管理"));
-    assertThat(actual.getEmployeeFirstName(), is("太郎"));
-    assertThat(actual.getRoleId(), is("ROLE_ADMIN"));
-
-    actual = dao.selectOne("100");
-    assertNull(actual);
+  /**
+   * @param sqlFile
+   * @throws Exception
+   */
+  protected void execute(SqlFile sqlFile) throws Exception {
+    Connection connection = getConnection();
+    try {
+      connection.setAutoCommit(false);
+      Statement statement = connection.createStatement();
+      try {
+        statement.execute(sqlFile.getSql());
+      } finally {
+        statement.close();
+      }
+    } finally {
+      try {
+        connection.rollback();
+      } finally {
+        connection.close();
+      }
+    }
   }
 
+  /**
+   * @return
+   * @throws Exception
+   */
+  protected Connection getConnection() throws Exception {
+    return DriverManager.getConnection(url, user, password);
+  }
+
+  /**
+   * @throws Exception
+   */
   @Test
-  public void selectUser() {
+  public void testSelectOne(TestInfo testInfo) throws Exception {
+    SqlFile sqlFile =
+        repository.getSqlFile(
+            testInfo.getTestMethod().get(),
+            "META-INF/com/example/dao/MstEmployeeDao/selectOne.sql",
+            dialect);
+    execute(sqlFile);
+  }
 
-    UserEntity actual = dao.selectUser("01");
-    assertThat(actual.getEmployeeLastName(), is("管理"));
-    assertThat(actual.getEmployeeFirstName(), is("太郎"));
-    assertThat(actual.getRoleId(), is("ROLE_ADMIN"));
-    assertThat(
-        actual.getPassword(), is("$2a$10$1gJJgBlL75OIjkSgkYPXI.mV7ihEPjxIiCkXKBEc7/r9xUIjZyc9i"));
+  /**
+   * @throws Exception
+   */
+  @Test
+  public void testSelectUser(TestInfo testInfo) throws Exception {
+    SqlFile sqlFile =
+        repository.getSqlFile(
+            testInfo.getTestMethod().get(),
+            "META-INF/com/example/dao/MstEmployeeDao/selectUser.sql",
+            dialect);
+    execute(sqlFile);
+  }
 
-    actual = dao.selectUser("100");
-    assertNull(actual);
+  /**
+   * @throws Exception
+   */
+  @Test
+  public void testSelectAll(TestInfo testInfo) throws Exception {
+    SqlFile sqlFile =
+        repository.getSqlFile(
+            testInfo.getTestMethod().get(),
+            "META-INF/com/example/dao/MstEmployeeDao/selectAll.sql",
+            dialect);
+    execute(sqlFile);
   }
 }

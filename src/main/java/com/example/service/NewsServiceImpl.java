@@ -6,18 +6,16 @@ import com.example.dto.NewsDto;
 import com.example.entity.MstNews;
 import com.example.entity.MstRole;
 import com.example.exception.BusinessException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /** お知らせ情報を操作するサービスクラス. */
 @Service

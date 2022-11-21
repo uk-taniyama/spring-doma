@@ -1,9 +1,8 @@
 package com.example.entity;
 
+import java.time.LocalDateTime;
 import org.seasar.doma.Entity;
 import org.seasar.doma.Version;
-
-import java.time.LocalDateTime;
 
 /** 監査項目(共通カラム)部分のエンティティ. */
 @Entity

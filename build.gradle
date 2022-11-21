@@ -1,56 +1,76 @@
 buildscript {
-    dependencies {
-        // specify your JDBC driver
-        classpath 'com.h2database:h2:2.1.214'
-    }
+  dependencies {
+    // specify your JDBC driver
+    classpath 'com.h2database:h2:2.1.214'
+  }
 }
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.5'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id 'org.domaframework.doma.codegen' version '2.0.0'
+  id 'java'
+  id 'org.springframework.boot' version '2.7.5'
+  id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+  id 'org.domaframework.doma.codegen' version '2.0.0'
+  id 'com.diffplug.spotless' version '6.11.0'
 }
+
+apply plugin: "groovy"
+apply plugin: 'org.domaframework.doma.codegen'
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2:2.1.214'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.flywaydb:flyway-core'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+  implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  compileOnly 'org.projectlombok:lombok'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  runtimeOnly 'com.h2database:h2:2.1.214'
+  annotationProcessor 'org.projectlombok:lombok'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  implementation 'org.flywaydb:flyway-core:9.8.1'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	// https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
-	implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
-	implementation 'org.seasar.doma.boot:doma-spring-boot-starter:1.6.0'
-	implementation 'org.seasar.doma:doma:2.29.0'
-    annotationProcessor "org.seasar.doma:doma:2.29.0"
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-aop'
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
+  implementation 'org.seasar.doma.boot:doma-spring-boot-starter:1.6.0'
+  implementation 'org.seasar.doma:doma:2.29.0'
+  annotationProcessor "org.seasar.doma:doma:2.29.0"
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+  useJUnitPlatform()
 }
+
+spotless {
+  java {
+    googleJavaFormat()
+  }
+  // groovyGradle {
+  // 	target '*.gradle', '*/*.gradle'
+  // 	greclipse()
+  // }
+  format "gradle", {
+    target '*.gradle', '*/*.gradle'
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+}
+
+compileJava.dependsOn 'spotlessJavaApply'
 
 // https://doma.readthedocs.io/en/2.20.0/build/
 // テンポラリディレクトリのパスを定義する
@@ -58,50 +78,51 @@ ext.domaResourcesDir = "${buildDir}/tmp/doma-resources"
 
 // domaが注釈処理で参照するリソースをテンポラリディレクトリに抽出
 task extractDomaResources(type: Copy, dependsOn: processResources)  {
-    from processResources.destinationDir
-    include 'doma.compile.config'
-    include 'META-INF/**/*.sql'
-    include 'META-INF/**/*.script'
-    into domaResourcesDir
+  from processResources.destinationDir
+  include 'doma.compile.config'
+  include 'META-INF/**/*.sql'
+  include 'META-INF/**/*.script'
+  into domaResourcesDir
 }
 
 // テンポラリディレクトリ内のリソースをcompileJavaタスクの出力先ディレクトリにコピーする
 task copyDomaResources(type: Copy, dependsOn: extractDomaResources)  {
-    from domaResourcesDir
-    into compileJava.destinationDir
+  from domaResourcesDir
+  into compileJava.destinationDir
 }
 
 compileJava {
-	// 上述のタスクに依存させる
-	dependsOn copyDomaResources
-	// テンポラリディレクトリをcompileJavaタスクの入力ディレクトリに設定する
-	inputs.dir domaResourcesDir
-	options.encoding = 'UTF-8'
+  // 上述のタスクに依存させる
+  dependsOn copyDomaResources
+  // テンポラリディレクトリをcompileJavaタスクの入力ディレクトリに設定する
+  inputs.dir domaResourcesDir
+  options.encoding = 'UTF-8'
 }
 
 compileTestJava {
-    options.encoding = 'UTF-8'
-    // テストの実行時は注釈処理を無効にする
-    options.compilerArgs = ['-proc:none']
+  options.encoding = 'UTF-8'
+  // テストの実行時は注釈処理を無効にする
+  options.compilerArgs = ['-proc:none']
 }
 
 // https://plugins.gradle.org/plugin/org.domaframework.doma.codegen
 domaCodeGen {
-    // make an arbitrary named block
-    dev {
-        // JDBC url
-        url = 'jdbc:h2:file:./work/db/db;MODE=MySQL'
-        // JDBC user
-        user = ''
-        // JDBC password
-        password = ''
-        // configuration for generated entity source files
-        entity {
-          packageName = 'org.example.entity'
-        }
-        // configuration for generated DAO source files
-        dao {
-          packageName = 'org.example.dao'
-        }
+  // make an arbitrary named block
+  dev {
+    // JDBC url
+    url = 'jdbc:h2:file:$projectDir/work/db/db;MODE=MySQL'
+    // JDBC user
+    user = ''
+    // JDBC password
+    password = ''
+    tableNamePattern = '^m.*'
+    // configuration for generated entity source files
+    entity {
+      packageName = 'org.example.entity'
     }
+    // configuration for generated DAO source files
+    dao {
+      packageName = 'org.example.dao'
+    }
+  }
 }

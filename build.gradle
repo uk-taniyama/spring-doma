@@ -59,14 +59,9 @@ spotless {
   java {
     googleJavaFormat()
   }
-  // groovyGradle {
-  // 	target '*.gradle', '*/*.gradle'
-  // 	greclipse()
-  // }
-  format "gradle", {
+  groovyGradle {
     target '*.gradle', '*/*.gradle'
-    indentWithSpaces(2)
-    endWithNewline()
+    greclipse().configFile("$rootDir/greclipse.properties")
   }
 }
 

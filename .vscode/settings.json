@@ -4,9 +4,6 @@
     {
       "preLaunchTask": "preLaunchTask",
       "name": "custom",
-      "classPaths": [
-        "${workspaceFolder}/build/classes/java/main/"
-      ],
       "env": {
         "SPRING_PROFILES_ACTIVE": "test"
       }

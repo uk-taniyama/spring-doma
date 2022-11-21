@@ -29,7 +29,7 @@ TEST:
 
 .PHONY: preLaunchTask ## vscodeのテスト用。
 preLaunchTask:
-	# sh gradlew compileJava copyToBin
+	sh gradlew compileJava copyToBin
 
 .PHONY: get-doma
 get-doma:

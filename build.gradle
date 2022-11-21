@@ -154,5 +154,5 @@ domaCodeGen {
 task copyToBin(type: Copy) {
   dependsOn compileJava
   from 'build/classes/java/main'
-  into 'bin/default'
+  into 'bin/main'
 }

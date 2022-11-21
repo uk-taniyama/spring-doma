@@ -14,7 +14,7 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -117,8 +117,8 @@ public class NewsManagerRegisterControllerTest {
   @Test
   public void お知らせ登録完了画面_リクエストマッピング() throws Exception {
 
-    doNothing().when(mockService).validateNews(Matchers.any());
-    doNothing().when(mockService).addNews(Matchers.any());
+    doNothing().when(mockService).validateNews(ArgumentMatchers.any());
+    doNothing().when(mockService).addNews(ArgumentMatchers.any());
 
     MvcResult result =
         this.mvc

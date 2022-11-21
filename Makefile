@@ -27,11 +27,15 @@ TEST:
 	sh gradlew --rerun-tasks test
 	# sh gradlew --rerun-tasks --debug test
 
-.PHONY: to-bin ## sqlをいじったりして、VSCodeでのビルドとかテストがうまくいかないときに実行する。
-to-bin:
-	sh gradlew compileJava copyToBin
+.PHONY: preLaunchTask ## vscodeのテスト用。
+preLaunchTask:
+	# sh gradlew compileJava copyToBin
 
 .PHONY: get-doma
 get-doma:
 	git clone --depth 1 --branch v2.0.0 https://github.com/domaframework/doma-codegen-plugin
 	cp -r doma-codegen-plugin/codegen/src/main/resources/org/seasar/doma/gradle/codegen/template/* template/
+
+.PHONY: show-report
+show-report:
+	npx http-server build/reports/tests/test/

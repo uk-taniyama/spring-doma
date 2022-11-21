@@ -1,0 +1,16 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.test.config": [
+    {
+      "preLaunchTask": "preLaunchTask",
+      "name": "custom",
+      "classPaths": [
+        "${workspaceFolder}/build/classes"
+      ],
+      "env": {
+        "SPRING_PROFILES_ACTIVE": "test"
+      }
+    }
+  ],
+  "java.test.defaultConfig": "custom"
+}

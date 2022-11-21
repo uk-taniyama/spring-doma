@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security4"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="manager/managerLayout">
+<head>
+    <!--
+    固有のヘッダ情報
+    -->
+    <script>
+        /**
+         * パラメータのページを設定してsubmitします.
+         * @param page
+         */
+        function pageJump(page) {
+            $("#page").val(page);
+            $("#news-input-form").submit();
+        }
+
+        /**
+         * 権限のモーダルダイアログを表示します.
+         */
+        function showRoleModal() {
+            $("#role-modal").modal("show");
+        }
+
+        /**
+         * 権限を検索します.
+         */
+        function findRole() {
+            // 権限取得のAjax処理
+            var findRoleAjax = getHtmlAjax(
+                "/edu/modal/role",
+                {roleNm : $("#modal-cond-role-nm").val()});
+
+            // 成功時処理
+            findRoleAjax.done(
+              function(data){
+                  $('#role-modal-result').html(data);
+              }
+            );
+        }
+
+        /**
+         * モーダルで選択した権限を設定します.
+         */
+        function setRoleId(roleId) {
+            $('#role-id').val(roleId);
+            $("#role-modal").modal("hide");
+        }
+    </script>
+</head>
+<body>
+<!-- メインコンテンツ -->
+<div class="container">
+    <div class="row">
+        <div layout:fragment="content" class="col col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">「重要なお知らせ」管理画面</h3></div>
+                <div class="panel-body">
+                    <div id="div-cond">
+                        <form id="news-input-form" th:action="@{/manager/news/list}"
+                              th:object="${newsListCondForm}" method="get">
+                            <input id="page" th:field="*{page}" type="hidden" />
+                            <label for="subject">お知らせ表題</label>
+                            <input class="form-control" id="subject" type="text" th:field="*{subject}"/>
+                            <label for="role-id">権限</label>
+                            <select class="form-control" id="role-id" name="roleId">
+                                <option value="">---</option>
+                                <option th:each="item : ${roleIdMap}" th:value="${item.key}" th:text="${item.value}"
+                                        th:selected="${item.key} == *{roleId}">pulldown
+                                </option>
+                            </select>
+                            <button type="button" th:onclick="'showRoleModal();'" class="btn-primary">権限検索</button>
+                            <br/>
+                            <div class="modal" id="role-modal" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">権限選択</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input class="form-control" id="modal-cond-role-nm"
+                                                   type="text" th:field="*{roleNm}"/>
+                                            <button type="button" class="btn btn-primary" th:onclick="'findRole();'">検索</button>
+                                            <div id="role-modal-result">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label for="url">お知らせURL</label>
+                            <input class="form-control" id="url" type="text" th:field="*{url}"/>
+                            <br/>
+                            <div class="row">
+                                <div class="form-group col col-sm-10">
+                                    <button type="button" th:onclick="'pageJump(1);'" class="btn-primary">検索</button>
+                                </div>
+                                <div class="col col-sm-2">
+                                    <a th:href="@{'/manager/news/register?input'}">新規作成</a>
+                                </div>
+                            </div>
+                            <nav th:if="${newsList}">
+                                <ul class="pagination">
+                                    <li th:if="*{page le 1}" class="disabled">
+                                        <a aria-label="前のページへ">
+                                            <span aria-hidden="true">«</span>
+                                        </a>
+                                    </li>
+                                    <li th:unless="*{page le 1}">
+                                        <a th:onclick="'pageJump(1);'"
+                                           aria-label="前のページへ">
+                                            <span aria-hidden="true">«</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="pageNum : ${#numbers.sequence(1, newsList.totalPages)}"
+                                        th:classappend="${page == pageNum} ? 'active'">
+                                        <a th:onclick="'pageJump(' + ${pageNum} + ');'" th:text="${pageNum}"></a>
+                                    </li>
+                                    <li th:if="${page ge newsList.totalPages}" class="disabled">
+                                        <a aria-label="次のページへ">
+                                            <span aria-hidden="true">»</span>
+                                        </a>
+                                    </li>
+                                    <li th:unless="${page ge newsList.totalPages}">
+                                        <a th:onclick="'pageJump(' + ${newsList.totalPages} + ');'"
+                                           aria-label="次のページへ">
+                                            <span aria-hidden="true">»</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </form>
+                    </div>
+                    <div id="div-list" th:if="${newsList}">
+
+                        <table class="table table-bordered">
+                            <thead class="bg-primary">
+                            <tr>
+                                <th rowspan="2">ID</th>
+                                <th rowspan="2">権限</th>
+                                <th>表題</th>
+                                <th rowspan="2">編集</th>
+                            </tr>
+                            <tr>
+                                <th>URL</th>
+                            </tr>
+                            </thead>
+                            <div th:remove="tag" th:each="news : ${newsList.content}">
+                                <tr th:classappend="${newsStat.odd} ? 'bg-info'">
+                                    <td rowspan="2" th:text="${news.id}"></td>
+                                    <td rowspan="2" th:text="${news.roleNm}"></td>
+                                    <td th:text="${news.subject}"></td>
+                                    <td rowspan="2">
+                                        <a th:href="@{'/manager/news/edit?input=&amp;id=' + ${news.id}}">修正</a>
+                                    </td>
+                                </tr>
+                                <tr th:classappend="${newsStat.odd} ? 'bg-info'">
+                                    <td th:text="${news.url}"></td>
+                                </tr>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

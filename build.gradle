@@ -12,7 +12,6 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-    domaGenRuntime
 }
 
 repositories {
@@ -39,9 +38,6 @@ dependencies {
 	implementation 'org.seasar.doma.boot:doma-spring-boot-starter:1.6.0'
 	implementation 'org.seasar.doma:doma:2.29.0'
     annotationProcessor "org.seasar.doma:doma:2.29.0"
-
-    domaGenRuntime 'org.seasar.doma:doma-gen:2.6.1'
-	domaGenRuntime 'com.h2database:h2'
 }
 
 tasks.named('test') {
@@ -80,36 +76,3 @@ compileTestJava {
     // テストの実行時は注釈処理を無効にする
     options.compilerArgs = ['-proc:none']
 }
-
-// https://doma-gen.readthedocs.io/en/2.6.1/gen/#id3
-task gen {
-    ant.taskdef(resource: 'domagentask.properties',
-        classpath: configurations.domaGenRuntime.asPath)
-    ant.gen(url: 'jdbc:h2:file:./work/db/db;MODE=MySQL', user: '', password: '') {
-        entityConfig()
-        daoConfig()
-        sqlConfig()
-    }
-}
-
-// task genEntity {
-//     ant.taskdef(resource: 'domagentask.properties',
-//         classpath: configurations.domaGenRuntime.asPath)
-//     ant.gen(url: 'jdbc:h2:file:./work/db/db;MODE=MySQL', user: '', password: '') {
-//         entityConfig(packageName: 'aaa.bbb',
-//             entityName: 'GroupByDeptId',
-//             sql: 'select dept_id, max(age) as max_age from emp group by dept_id')
-//     }
-// }
-
-// task genTestCases  {
-//     ant.taskdef(resource: 'domagentask.properties',
-//         classpath: configurations.domaGenRuntime.asPath)
-//     ant.gen(url: 'jdbc:h2:file:./work/db/db;MODE=MySQL', user: '', password: '') {
-//         sqlTestCaseConfig {
-//             fileset(dir: 'src/main/resources') {
-//                 include(name: 'META-INF/**/*.sql')
-//             }
-//         }
-//     }
-// }

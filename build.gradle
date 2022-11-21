@@ -11,7 +11,7 @@ plugins {
   id 'io.spring.dependency-management' version '1.0.15.RELEASE'
   id 'org.domaframework.doma.codegen' version '2.0.0'
   id 'com.diffplug.spotless' version '6.11.0'
-  id 'com.diffplug.eclipse.apt' version '3.39.0'
+  // id 'com.diffplug.eclipse.apt' version '3.39.0'
 }
 
 apply plugin: "groovy"
@@ -136,11 +136,21 @@ domaCodeGen {
   }
 }
 
-eclipse {
-  jdt {
-    apt {
-      genSrcDir = file('src-gen/main/java')
-      genTestSrcDir = file('src-gen/test/java')
-    }
-  }
+// eclipse {
+//   jdt {
+//     apt {
+//       genSrcDir = file('src-gen/main/java')
+//       genTestSrcDir = file('src-gen/test/java')
+//     }
+//   }
+// }
+
+// task _copySqls(type: Copy) {
+//   from 'src/main/resources/META-INF'
+//   into 'bin/default/META-INF'
+// }
+
+task copyToBin(type: Copy) {
+  from 'build/classes/java/main'
+  into 'bin/default'
 }

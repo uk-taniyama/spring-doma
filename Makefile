@@ -22,6 +22,10 @@ gen:
 test:
 	sh gradlew test
 
+.PHONY: clean ## きれいにする。
+clean:
+	rm -rf build
+
 .PHONY: TEST ## テストを再実行する。
 TEST:
 	sh gradlew --rerun-tasks test

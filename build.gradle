@@ -1,6 +1,5 @@
 buildscript {
   dependencies {
-    // specify your JDBC driver
     classpath 'com.h2database:h2:2.1.214'
   }
 }
@@ -11,7 +10,7 @@ plugins {
   id 'io.spring.dependency-management' version '1.0.15.RELEASE'
   id 'org.domaframework.doma.codegen' version '2.0.0'
   id 'com.diffplug.spotless' version '6.11.0'
-  // id 'com.diffplug.eclipse.apt' version '3.39.0'
+  id 'org.domaframework.doma.compile' version '2.0.0'
 }
 
 apply plugin: "groovy"
@@ -82,38 +81,6 @@ spotless {
 
 compileJava.dependsOn 'spotlessJavaApply'
 
-// https://doma.readthedocs.io/en/2.20.0/build/
-// テンポラリディレクトリのパスを定義する
-ext.domaResourcesDir = "${buildDir}/tmp/doma-resources"
-
-// domaが注釈処理で参照するリソースをテンポラリディレクトリに抽出
-task extractDomaResources(type: Copy, dependsOn: processResources)  {
-  from processResources.destinationDir
-  include 'doma.compile.config'
-  include 'META-INF/**/*.sql'
-  include 'META-INF/**/*.script'
-  into domaResourcesDir
-}
-
-// テンポラリディレクトリ内のリソースをcompileJavaタスクの出力先ディレクトリにコピーする
-task copyDomaResources(type: Copy, dependsOn: extractDomaResources)  {
-  from domaResourcesDir
-  into compileJava.destinationDir
-}
-
-compileJava {
-  // 上述のタスクに依存させる
-  dependsOn copyDomaResources
-  // テンポラリディレクトリをcompileJavaタスクの入力ディレクトリに設定する
-  inputs.dir domaResourcesDir
-  options.encoding = 'UTF-8'
-}
-
-compileTestJava {
-  options.encoding = 'UTF-8'
-  // テストの実行時は注釈処理を無効にする
-  options.compilerArgs = ['-proc:none']
-}
 
 // https://plugins.gradle.org/plugin/org.domaframework.doma.codegen
 domaCodeGen {
@@ -136,20 +103,6 @@ domaCodeGen {
     }
   }
 }
-
-// eclipse {
-//   jdt {
-//     apt {
-//       genSrcDir = file('src-gen/main/java')
-//       genTestSrcDir = file('src-gen/test/java')
-//     }
-//   }
-// }
-
-// task _copySqls(type: Copy) {
-//   from 'src/main/resources/META-INF'
-//   into 'bin/default/META-INF'
-// }
 
 task copyToBin(type: Copy) {
   dependsOn compileJava

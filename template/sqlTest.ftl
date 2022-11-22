@@ -27,67 +27,7 @@ import org.seasar.doma.jdbc.dialect.Dialect;
  * @author ${lib.author}
 </#if>
  */
-public class <#if entityPrefix??>${entityPrefix}</#if>${simpleName}<#if entitySuffix??>${entitySuffix}</#if> {
-
-    /** */
-    protected SqlFileRepository repository;
-
-    /** */
-    protected Dialect dialect;
-
-    /** */
-    protected Driver driver;
-
-    /** */
-    protected String url;
-
-    /** */
-    protected String user;
-
-    /** */
-    protected String password;
-
-    @BeforeEach
-    protected void setUp() throws Exception {
-        repository = new NoCacheSqlFileRepository();
-        dialect = new ${dialectClassName}();
-        url = "${url}";
-        user = "${user}";
-        password = "${password}";
-    }
-
-    /**
-     * 
-     * @param sqlFile
-     * @throws Exception
-     */
-    protected void execute(SqlFile sqlFile) throws Exception {
-        Connection connection = getConnection();
-        try {
-            connection.setAutoCommit(false);
-            Statement statement = connection.createStatement();
-            try {
-                statement.execute(sqlFile.getSql());
-            } finally {
-                statement.close();
-            }
-        } finally {
-            try {
-                connection.rollback();
-            } finally {
-                connection.close();
-            }
-        }
-    }
-
-    /**
-     * 
-     * @return
-     * @throws Exception
-     */
-    protected Connection getConnection() throws Exception {
-        return DriverManager.getConnection(url, user, password);
-    }
+public class <#if entityPrefix??>${entityPrefix}</#if>${simpleName}<#if entitySuffix??>${entitySuffix}</#if> extends DaoTestBase {
 <#list methodDescs as methodDesc>
 
     /**

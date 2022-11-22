@@ -93,6 +93,7 @@ domaCodeGen {
     // JDBC password
     password = ''
     tableNamePattern = '^m.*'
+    templateDir = file("${projectDir}/template")
     // configuration for generated entity source files
     entity {
       packageName = 'org.example.entity'

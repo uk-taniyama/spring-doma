@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.Statement;
-
-import org.aspectj.lang.annotation.Before;
 import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeEach;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
 import org.seasar.doma.jdbc.SqlFile;
 import org.seasar.doma.jdbc.SqlFileRepository;

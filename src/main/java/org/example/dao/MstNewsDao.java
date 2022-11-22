@@ -6,8 +6,11 @@ import org.seasar.doma.Delete;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
+import org.seasar.doma.boot.ConfigAutowireable;
+import org.springframework.transaction.annotation.Transactional;
 
 /** */
+@ConfigAutowireable
 @Dao
 public interface MstNewsDao {
 
@@ -31,6 +34,7 @@ public interface MstNewsDao {
    * @return affected rows
    */
   @Insert
+  @Transactional
   int insert(MstNews entity);
 
   /**
@@ -38,6 +42,7 @@ public interface MstNewsDao {
    * @return affected rows
    */
   @Update
+  @Transactional
   int update(MstNews entity);
 
   /**
@@ -45,5 +50,6 @@ public interface MstNewsDao {
    * @return affected rows
    */
   @Delete
+  @Transactional
   int delete(MstNews entity);
 }

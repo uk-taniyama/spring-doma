@@ -6,8 +6,11 @@ import org.seasar.doma.Delete;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
+import org.seasar.doma.boot.ConfigAutowireable;
+import org.springframework.transaction.annotation.Transactional;
 
 /** */
+@ConfigAutowireable
 @Dao
 public interface MstPasswordDao {
 
@@ -31,6 +34,7 @@ public interface MstPasswordDao {
    * @return affected rows
    */
   @Insert
+  @Transactional
   int insert(MstPassword entity);
 
   /**
@@ -38,6 +42,7 @@ public interface MstPasswordDao {
    * @return affected rows
    */
   @Update
+  @Transactional
   int update(MstPassword entity);
 
   /**
@@ -45,5 +50,6 @@ public interface MstPasswordDao {
    * @return affected rows
    */
   @Delete
+  @Transactional
   int delete(MstPassword entity);
 }

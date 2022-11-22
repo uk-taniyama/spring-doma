@@ -10,12 +10,15 @@ package ${packageName};
 <#list importNames as importName>
 import ${importName};
 </#list>
+import org.seasar.doma.boot.ConfigAutowireable;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
 <#if lib.author??>
  * @author ${lib.author}
 </#if>
  */
+@ConfigAutowireable
 @Dao<#if configClassSimpleName??>(config = ${configClassSimpleName}.class)</#if>
 public interface ${simpleName} {
 
@@ -47,6 +50,7 @@ public interface ${simpleName} {
      * @return affected rows
      */
     @Insert
+    @Transactional
     int insert(<#if entityDesc.entityPrefix??>${entityDesc.entityPrefix}</#if>${entityDesc.simpleName}<#if entityDesc.entitySuffix??>${entityDesc.entitySuffix}</#if> entity);
 
     /**
@@ -54,6 +58,7 @@ public interface ${simpleName} {
      * @return affected rows
      */
     @Update
+    @Transactional
     int update(<#if entityDesc.entityPrefix??>${entityDesc.entityPrefix}</#if>${entityDesc.simpleName}<#if entityDesc.entitySuffix??>${entityDesc.entitySuffix}</#if> entity);
 
     /**
@@ -61,5 +66,6 @@ public interface ${simpleName} {
      * @return affected rows
      */
     @Delete
+    @Transactional
     int delete(<#if entityDesc.entityPrefix??>${entityDesc.entityPrefix}</#if>${entityDesc.simpleName}<#if entityDesc.entitySuffix??>${entityDesc.entitySuffix}</#if> entity);
 }

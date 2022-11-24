@@ -11,6 +11,7 @@ plugins {
   id 'org.domaframework.doma.codegen' version '2.0.0'
   id 'com.diffplug.spotless' version '6.11.0'
   id 'org.domaframework.doma.compile' version '2.0.0'
+  id 'com.diffplug.eclipse.apt' version '3.25.0'
 }
 
 apply plugin: "groovy"
@@ -105,8 +106,25 @@ domaCodeGen {
   }
 }
 
-task copyToBin(type: Copy) {
-  dependsOn compileJava
-  from 'build/classes/java/main'
-  into 'bin/main'
+compileJava {
+  aptOptions {
+    processorArgs = [
+      'doma.resources.dir' : "${projectDir}/src/main/resources"
+    ]
+  }
+}
+
+eclipse {
+  classpath {
+    file {
+      whenMerged { classpath ->
+        classpath.entries.removeAll { it.path == '.apt_generated' }
+      }
+      withXml { provider ->
+        def node = provider.asNode()
+        // specify output path for .apt_generated
+        node.appendNode( 'classpathentry', [ kind: 'src', output: 'bin/main', path: '.apt_generated'])
+      }
+    }
+  }
 }

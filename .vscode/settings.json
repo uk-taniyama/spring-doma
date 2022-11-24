@@ -1,13 +1,3 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
-  "java.test.config": [
-    {
-      "preLaunchTask": "preLaunchTask",
-      "name": "custom",
-      "env": {
-        "SPRING_PROFILES_ACTIVE": "test"
-      }
-    }
-  ],
-  "java.test.defaultConfig": "custom"
 }

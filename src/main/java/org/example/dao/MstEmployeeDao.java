@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import java.util.List;
 import org.example.entity.MstEmployee;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Delete;
@@ -52,4 +53,7 @@ public interface MstEmployeeDao {
   @Delete
   @Transactional
   int delete(MstEmployee entity);
+
+  @Select
+  List<MstEmployee> selectAll();
 }

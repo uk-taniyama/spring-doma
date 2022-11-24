@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import org.junit.BeforeClass;
+
+import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.BeforeAll;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
 import org.seasar.doma.jdbc.SqlFile;
 import org.seasar.doma.jdbc.SqlFileRepository;
@@ -12,30 +14,32 @@ import org.seasar.doma.jdbc.dialect.Dialect;
 
 public class DaoTestBase {
   /** */
-  protected SqlFileRepository repository;
+  static SqlFileRepository repository;
 
   /** */
-  protected Dialect dialect;
+  static Dialect dialect;
 
   /** */
-  protected Driver driver;
+  static Driver driver;
 
   /** */
-  protected String url;
+  static String url;
 
   /** */
-  protected String user;
+  static String user;
 
   /** */
-  protected String password;
+  static String password;
 
-  @BeforeClass
-  protected void setUp() throws Exception {
+  @BeforeAll
+  static void setUp() throws Exception {
     repository = new NoCacheSqlFileRepository();
     dialect = new org.seasar.doma.jdbc.dialect.H2Dialect();
-    url = "jdbc:h2:mem:db;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
+    url = "jdbc:h2:mem:db;MODE=MySQL;DB_CLOSE_DELAY=-1";
     user = "";
     password = "";
+
+    Flyway.configure().dataSource(url, user, password).load().migrate();
   }
 
   /**

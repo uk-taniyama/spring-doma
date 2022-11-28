@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.Statement;
-
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
@@ -36,8 +35,8 @@ public class DaoTestBase {
     repository = new NoCacheSqlFileRepository();
     dialect = new org.seasar.doma.jdbc.dialect.H2Dialect();
     url = "jdbc:h2:mem:db;MODE=MySQL;DB_CLOSE_DELAY=-1";
-    user = "";
-    password = "";
+    user = "user";
+    password = "pass";
 
     Flyway.configure().dataSource(url, user, password).load().migrate();
   }

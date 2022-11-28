@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <MST_NEWS MST_NEWS_ID="1" ROLE_ID="ROLE_ADMIN" SUBJECT="表題テスト1" URL="http://hoge/test1" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="2" ROLE_ID="ROLE_ADMIN" SUBJECT="表題テスト2" URL="http://hoge/test2" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="3" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト1" URL="http://hogehoge/test1" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="4" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト2" URL="http://hogehoge/test2" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="5" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト3" URL="http://hogehoge/test3" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="6" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト4" URL="http://hogehoge/test4" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="7" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト5" URL="http://hogehoge/test5" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="8" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト6" URL="http://hogehoge/test6" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="9" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト7" URL="http://hogehoge/test7" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="10" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト8" URL="http://hogehoge/test8" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="11" ROLE_ID="ROLE_USER" SUBJECT="テスト表題テスト9" URL="http://hogehoge/test9" VERSION="0"/>
+  <MST_NEWS MST_NEWS_ID="12" ROLE_ID="100" SUBJECT="表題100" URL="http://a.b" VERSION="0" INSERT_DATE="2022-11-28 01:39:14.733535"/>
+</dataset>
